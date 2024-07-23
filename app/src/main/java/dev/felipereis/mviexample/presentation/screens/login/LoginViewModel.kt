@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
@@ -17,12 +18,12 @@ class LoginViewModel : ViewModel() {
     val state = _state.asStateFlow()
 
     init {
-        _state.map { it.email }.onEach {
-            _state.value = _state.value.copy(isEmailValid = isValidEmail(it))
+        _state.map { it.email }.onEach { email ->
+            _state.update { it.copy(isEmailValid = isValidEmail(email)) }
         }.launchIn(viewModelScope)
 
-        _state.map { it.password }.onEach {
-            _state.value = _state.value.copy(isPasswordValid = isValidPassword(it))
+        _state.map { it.password }.onEach { password ->
+            _state.update { it.copy(isPasswordValid = isValidPassword(password)) }
         }.launchIn(viewModelScope)
     }
 
@@ -35,19 +36,19 @@ class LoginViewModel : ViewModel() {
     }
 
     private fun onEmailChanged(email: String) {
-        _state.value = _state.value.copy(email = email)
+        _state.update { it.copy(email = email) }
     }
 
     private fun onPasswordChanged(password: String) {
-        _state.value = _state.value.copy(password = password)
+        _state.update { it.copy(password = password) }
     }
 
     private fun loginIn(email: String, password: String) {
-        _state.value = _state.value.copy(isLoading = true)
+        _state.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
             delay(2000)
-            _state.value = _state.value.copy(isLoading = false)
+            _state.update { it.copy(isLoading = false) }
         }
     }
 
