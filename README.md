@@ -1,1 +1,1 @@
-![](https://github.com/Your_Repository_Name/demo.gif)
+![](https://github.com/devfelipereis/MVI-Jetpack-Compose-Example/demo.gif)
